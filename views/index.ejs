@@ -9,25 +9,23 @@
 
         <div class="container content">
 
-            <div class="col-xs-12">
+            <div class="col-xs-12 col-md-10 col-md-offset-1">
                 <div class="tableContainer">
                     <h2 class="text-center">Polls</h2>
                     <p class="text-center">Select a poll to see the results and vote, or sign-in to make a new poll</p>
-                    <table class="table table-striped">
+                    <table class="table table-striped pollTable">
                         <thead>
-                        <tr>
-                            <td><strong>Name</strong></strong></td>
-                            <td><strong>Entries</strong></strong></td>
-                        </tr>
+                            <tr>
+                                <td class="text-center"><strong>Name</strong></td>
+                            </tr>
                         </thead>
 
                         <tbody>
-                        <% for(var i = 0; i < polls.length; i++) { %>
-                        <tr>
-                            <td><%= polls[i].name %></td>
-                            <td><%= polls[i].entries %></td>
-                        </tr>
-                        <% } %>
+                            <% for(var i = 0; i < polls.length; i++) { %>
+                            <tr>
+                                <td class="text-center"><a href="/polldetails/<%- polls[i]._id %>"><%= polls[i].name %></a></td>
+                            </tr>
+                            <% } %>
                         </tbody>
 
                     </table>
@@ -47,6 +45,7 @@
                 border: 1px solid #ccc;
                 border-radius: 8px;
             }
+
         </style>
     </body>
 </html>
