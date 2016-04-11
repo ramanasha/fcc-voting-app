@@ -1,10 +1,9 @@
 var mongoose= require('mongoose');
 
 var pollSchema = mongoose.Schema({
-                                     name:      String,
-                                     entries:   Number,
-                                     choices:   [Array],
-                                     email:     String
+                                     name:          String,
+                                     choices:       [String],
+                                     email:         String
                                  });
 
 
