@@ -1,0 +1,5 @@
+body {
+    background-image: url('/public/img/bg-pattern.pgn') !important;
+    background-repeat: repeat;
+    font-size: 14px;
+}

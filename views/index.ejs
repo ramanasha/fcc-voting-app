@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+
+    <% include ./partials/head %>
+
+    <body>
+
+        <% include ./partials/navNotAuthenticated %>
+
+        <div class="container content">
+
+            <div class="col-xs-12">
+                <div class="tableContainer">
+                    <h2 class="text-center">Polls</h2>
+                    <p class="text-center">Select a poll to see the results and vote, or sign-in to make a new poll</p>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <td><strong>Name</strong></strong></td>
+                            <td><strong>Entries</strong></strong></td>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <% for(var i = 0; i < polls.length; i++) { %>
+                        <tr>
+                            <td><%= polls[i].name %></td>
+                            <td><%= polls[i].entries %></td>
+                        </tr>
+                        <% } %>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <% include ./partials/scripts %>
+        <style>
+            .content {
+                margin-top: 75px;
+            }
+            .tableContainer {
+                background-color: #fff;
+                box-shadow: 0px 0px 8px #bbb;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+            }
+        </style>
+    </body>
+</html>
