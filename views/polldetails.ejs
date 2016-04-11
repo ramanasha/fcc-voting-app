@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+
+    <% include ./partials/head %>
+
+    <body>
+
+        <% include ./partials/navNotAuthenticated %>
+
+        <div class="container content">
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <p><%= polldetail.name %></p>
+                        <form>
+                            <div class="form-group">
+                                <label for="pollchoices">I would like to vote for...</label>
+                                <select class="assign_dev">
+                                    <option value="unassigned">unassigned</option>
+                                    <%
+                                    for (var j = 0; j < developers.length; j++){
+                                    %><option value="<%= developers[j]._id %>"><%= developers[j].firstname %><%
+                                        }
+                                        %>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <% include ./partials/scripts %>
+        <style>
+            .content {
+                margin-top: 75px;
+            }
+            .tableContainer {
+                background-color: #fff;
+                box-shadow: 0px 0px 8px #bbb;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+            }
+
+        </style>
+    </body>
+</html>
