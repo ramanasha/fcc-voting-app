@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+
+    <% include ./partials/head %>
+
+    <body>
+
+        <% include ./partials/navNotAuthenticated %>
+
+        <div class="container content">
+
+            <div class="jumbotron">
+                <h1>My Polls</h1>
+                <p><strong>Bellow are the polls you own</strong></p>
+                <br><p>Select a poll to see the results and vote, or <a href="/newpoll">make a new poll</a></p>
+
+                <table class="table table-bordered pollTable">
+                    <thead>
+                    <tr>
+                        <td class="text-center"><strong>Name</strong></td>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <% for(var i = 0; i < polls.length; i++) { %>
+                    <tr>
+                        <td class="text-center"><a href="/polldetails/<%- polls[i]._id %>"><%= polls[i].name %></a></td>
+                    </tr>
+                    <% } %>
+                    </tbody>
+
+                </table>
+            </div>
+
+
+        </div>
+
+        <% include ./partials/scripts %>
+
+        <style>
+            .content {
+                margin-top: 75px;
+            }
+        </style>
+    </body>
+</html>
