@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+
+    <% include ./partials/head %>
+
+    <body>
+
+        <% include ./partials/navNotAuthenticated %>
+
+        <div class="container content">
+
+            <div class="jumbotron">
+                <form id="newPoll">
+                    <h1>Make a new poll!</h1>
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input class="form-control" type="text" name="name" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="options">Options (seperated by newline):</label>
+                        <textarea class="form-control" name="options" id="options" rows="4" required></textarea>
+                    </div>
+                    <button class="btn btn-primary btn-lg">Make</button>
+                </form>
+            </div>
+
+
+        </div>
+
+        <% include ./partials/scripts %>
+
+        <style>
+            .content {
+                margin-top: 75px;
+            }
+        </style>
+
+        <script>
+            $('#newPoll').submit(function(event) {
+                event.preventDefault();
+
+                var pollData = {};
+                pollData.name = $('#name').val();
+                pollData.choices = $('#options').val().split('\n');
+
+                $.ajax({
+                    url:        '/newpoll',
+                    method:     'POST',
+                    data:       pollData,
+                    dataType:   'json',
+                    success:    function(data) {
+                        $('#name').val('');
+                        $('#options').val('');
+                        alert('Poll created successfull!');
+                    },
+                    error:      function(data) {
+                        $('#name').val('');
+                        $('#options').val('');
+                        alert('There was an error in creating poll. Please try again!');
+                    }
+               });
+            });
+        </script>
+    </body>
+</html>
