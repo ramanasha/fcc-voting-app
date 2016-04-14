@@ -37,7 +37,7 @@ module.exports = function(app, passport) {
     }));
 
     app.get('/profile', isLoggedIn, function(req, res) {
-        pollModel.find({}, function(err, doc) {
+        pollModel.find({email: req.user.email}, function(err, doc) {
             if (err) {
                 res.status(400).json({error: err});
             }
@@ -53,21 +53,64 @@ module.exports = function(app, passport) {
         res.redirect('/');
     });
 
+    app.get('/newpoll', isLoggedIn, function(req, res) {
+        res.render('newpoll');
+    });
+
     app.post('/newpoll', function(req, res) {
-        var entry = new pollModel(req.body);
-        entry.save(function(err, doc) {
+        var entry = req.body;
+        entry.email = req.user.email;
+
+        var newPoll = new pollModel(entry);
+        newPoll.save(function(err, doc) {
             if (err) {
                 return res.status(400).json({error: err});
             }
 
-            res.json(doc);
+            res.json({status: 'ok'});
         });
     });
 
     app.get('/polldetails/:poll', function(req, res) {
         var params = req.params.poll;
 
-    })
+        pollModel.find({_id: params}, function(err, doc) {
+            if (err) {
+                return res.json(400).json({error: err});
+            }
+
+            if (req.isAuthenticated()) {
+                res.render('polldetails', {polldetail: doc[0], user: true });
+            } else {
+                res.render('polldetails', {polldetail: doc[0], user: false });
+            }
+
+        });
+    });
+
+    app.get('/mypolls', isLoggedIn, function(req, res) {
+        pollModel.find({email: req.user.email}, function(err, doc) {
+            if (err) {
+                return res.status(400).json({error: err});
+            }
+
+            res.render('mypolls', {polls: doc});
+        });
+    });
+
+    app.delete('/deletepoll/:id', function(req, res) {
+        var params = req.params.id;
+
+        pollModel.find({_id: params}).remove(function(err, doc) {
+            if (err) {
+                return res.status(400).json({error: err});
+            }
+
+            res.json({pollDeleted: true});
+        });
+    });
+
+
 
 }
 
