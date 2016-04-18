@@ -5,6 +5,11 @@ var userModel = require('../models/user');
 
 module.exports = function(app, passport) {
 
+    app.use(function (req, res, next) {
+        res.locals.login = req.isAuthenticated();
+        next();
+    });
+
     app.get('/', function(req, res) {
         pollModel.find({}, function(err, doc) {
             if (err) {
@@ -60,6 +65,7 @@ module.exports = function(app, passport) {
     app.post('/newpoll', function(req, res) {
         var entry = req.body;
         entry.email = req.user.email;
+        console.log('entry', entry);
 
         var newPoll = new pollModel(entry);
         newPoll.save(function(err, doc) {
@@ -110,7 +116,21 @@ module.exports = function(app, passport) {
         });
     });
 
+    app.post('/pollVote/', function(req, res) {
+        var entry = req.body;
+        var votestr = 'votes.' + entry.itemNum;
+        var updateStr = {};
+        updateStr['$inc'] = {};
+        updateStr['$inc'][votestr] = 1;
 
+        pollModel.findOneAndUpdate({_id: entry.id}, updateStr ).exec(function(err, doc) {
+            if (err) {
+                return res.status(400).json({error: err});
+            }
+
+            res.json({status: 'ok'});
+        });
+    });
 
 }
 
