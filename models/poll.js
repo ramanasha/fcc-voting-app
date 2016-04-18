@@ -3,6 +3,7 @@ var mongoose= require('mongoose');
 var pollSchema = mongoose.Schema({
                                      name:          String,
                                      choices:       [String],
+                                     votes:         [Number],
                                      email:         String
                                  });
 
