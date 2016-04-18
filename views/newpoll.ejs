@@ -5,7 +5,7 @@
 
     <body>
 
-        <% include ./partials/navNotAuthenticated %>
+        <% include ./partials/navigation %>
 
         <div class="container content">
 
@@ -29,19 +29,20 @@
 
         <% include ./partials/scripts %>
 
-        <style>
-            .content {
-                margin-top: 75px;
-            }
-        </style>
-
         <script>
             $('#newPoll').submit(function(event) {
                 event.preventDefault();
 
                 var pollData = {};
                 pollData.name = $('#name').val();
-                pollData.choices = $('#options').val().split('\n');
+                var choices = $('#options').val().split('\n');
+                pollData.choices = choices.map(function(item, index) {
+                   return item;
+                });
+                pollData.votes = choices.map(function(item) {
+                    return Number(0);
+                });
+
 
                 $.ajax({
                     url:        '/newpoll',

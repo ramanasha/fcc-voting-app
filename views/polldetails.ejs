@@ -4,11 +4,7 @@
     <% include ./partials/head %>
 
     <body>
-        <% if (user) { %>
-            <% include ./partials/navAuthenticated %>
-        <% } else { %>
-            <% include ./partials/navNotAuthenticated %>
-        <% } %>
+        <% include ./partials/navigation %>
 
         <div class="container content">
             <div class="jumbotron">
@@ -18,25 +14,19 @@
                         <form id="pollVote">
                             <div class="form-group">
                                 <label for="pollchoices">I would like to vote for...</label><br>
-                                <select class="pollChoices">
+                                <select class="pollChoices" required>
+                                    <option value="">Choose an option...</option>
                                     <% for (var i = 0; i < polldetail.choices.length; i++){ %>
-                                    <option value="<%= polldetail.choices[i] %>"><%= polldetail.choices[i] %>
+                                    <option value="<%= i %>"><%= polldetail.choices[i] %>
                                     <% } %>
                                 </select>
                             </div>
                             <button class="btn btn-primary btn-lg btn-block">Vote</button><br />
-                            <a href="https://twitter.com/share" class="twitter-share-button" data-via="ratracegrad" data-size="large”><button class="btn btn-default btn-lg btn-block">Share on Twitter</button></a>
-
-                            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-
+                            <a href="#" onclick="javascript:window.location='https://twitter.com/intent/tweet?url=' + window.location.href + '&text=check out my poll';" class="btn btn-block btn-lg twitterButton"><i class="fa fa-twitter"></i> Share on Twitter</a>
                         </form>
                     </div>
                     <div class="col-xs-8">
-                        <ul class="pollLegend text-center">
-                            <% for (var i = 0; i < polldetail.choices.length; i++){ %>
-                                <li> <%= polldetail.choices[i] %> </li>
-                            <% } %>
-                        </ul>
+                        <canvas id="pollChart"></canvas>
                         <% if (user) { %>
                             <button class="btn btn-lg btn-danger btn-block" onclick="deletePoll('<%= polldetail._id %>')">Delete Poll</button>
                         <% } %>
@@ -48,44 +38,57 @@
         </div>
 
         <% include ./partials/scripts %>
-        <style>
-            .content {
-                margin-top: 75px;
-            }
-            .pollChoices {
-                display: block;
-                width: 100%;
-                height: 34px;
-                padding: 6px 12px;
-                font-size: 14px;
-                line-height: 1.5;
-                background-color: white;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-            }
-            .pollLegend {
-                list-style: none;
-            }
-            .pollLegend li {
-                display: inline-block;
-                font-size: 14px;
-            }
-        </style>
 
 
         <script>
+            var ch = <%- JSON.stringify(polldetail) %>;
+            var config = {
+                type: 'doughnut',
+                data: {
+                    labels: ch.choices,
+                    datasets: [
+                        {
+                            data: ch.votes,
+                            backgroundColor: bgrndColor
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    legend: {
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: ch.name
+                    }
+                }
+            };
+
+            window.onload = function() {
+                var ctx = document.getElementById('pollChart').getContext('2d');
+                window.myDoughnut = new Chart(ctx, config);
+            };
+
+
+            var thisURL = "https://twitter.com/intent/tweet?url=" + window.location.href + "&text=check out my poll";
+
             $('#pollVote').submit(function(event){
                 event.preventDefault();
 
+                var entry = {};
+                entry.itemNum = $('.pollChoices').find(":selected").val();
+                entry.id = '<%= polldetail._id %>';
+
                 $.ajax({
                            method:     'POST',
-                           url:        '/pollvote',
-                           data:       $(event.target).serialize(),
+                           url:        '/pollvote/',
+                           data:       entry,
                            success:    function(data) {
-
+                                alert('Your vote has been recorded!');
                            },
                            error:      function(data) {
-
+                                alert('There was an error in recording your vote. Please try again.');
                            }
                });
             });
