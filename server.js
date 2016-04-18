@@ -15,7 +15,7 @@ var configDB = require('./config/database.js');
 var path = require('path');
 var favicon = require('serve-favicon');
 var port = process.env.PORT || 3000;
-var dbURI = process.env.MONGOLAB_URI || MONGODB_URI || configDB.url;
+var dbURI = process.env.MONGOLAB_URI || process.env.MONGODB_URI || configDB.url;
 
 /**
  * connect to database
