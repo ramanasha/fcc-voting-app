@@ -74,6 +74,8 @@ mongoose.connection.on('connected', function () {
 
     require('./routes/index.js')(app, passport);
 
+    var app = exports.app = express();
+
     /**
      * start server
      */
