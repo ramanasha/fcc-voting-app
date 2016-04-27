@@ -1,7 +1,6 @@
 'use strict';
 
 var pollModel = require('../models/poll');
-var userModel = require('../models/user');
 
 module.exports = function(app, passport) {
 
@@ -130,6 +129,10 @@ module.exports = function(app, passport) {
 
             res.json({status: 'ok'});
         });
+    });
+
+    app.get('/test/endpoint', function(req, res, next) {
+        res.json({ status: 'OK' });
     });
 
 }
