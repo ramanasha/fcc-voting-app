@@ -17,6 +17,11 @@ var favicon = require('serve-favicon');
 var port = process.env.PORT || 3000;
 var dbURI = process.env.MONGOLAB_URI || process.env.MONGODB_URI || configDB.url;
 
+
+var app = express();
+
+module.exports = app;
+
 /**
  * connect to database
  */
@@ -48,7 +53,6 @@ mongoose.connection.on('connected', function () {
     /**
      * configure our server
      */
-    var app = express();
 
     require('./config/passport')(passport);
 
@@ -74,14 +78,14 @@ mongoose.connection.on('connected', function () {
 
     require('./routes/index.js')(app, passport);
 
-    var app = exports.app = express();
-
     /**
      * start server
      */
     app.listen(port, function() {
         console.log('Server listening on port ' + port + '...');
     });
+
+
 
 });
 
