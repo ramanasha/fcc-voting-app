@@ -60,7 +60,7 @@ mongoose.connection.on('connected', function () {
     app.use(cookieParser());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: true}));
-    app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
+    app.use(favicon(path.join(__dirname, 'public/img', 'favicon.png')));
     app.use('/public', express.static('public'));
     app.set('view engine', 'ejs');
 
